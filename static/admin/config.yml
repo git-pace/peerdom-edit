@@ -1,0 +1,50 @@
+backend:
+  name: github
+  repo: git-pace/peerdomedit
+
+media_folder: "static/images/uploads" # Media files will be stored in the repo under static/images/uploads
+public_folder: "/images/uploads" # The src attribute for uploaded media will begin with /images/uploads
+publish_mode: editorial_workflow
+
+collections: # A list of collections the CMS should be able to edit
+  - name: "circles" # Used in routes, ie.: /admin/collections/:slug/edit
+    label: "Circle" # Used in the UI, ie.: "New Post"
+    folder: "content/circles" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    fields: # The fields each document in this collection have
+      - {label: "Name", name: "name", widget: "string", required: true}
+      - {label: "Purpose", name: "purpose", widget: "string", required: true}
+      - {label: "Domains", name: "domains", widget: "string", required: false}
+      - {label: "Policy", name: "policy", widget: "string", required: false}
+      - {label: "Members",
+          name: "members",
+          widget: "list",
+          field: {label: "Name", name: "name", widget: "relation", collection: "members", searchFields: ["username"], valueField: "username"}}
+      - {label: "Roles",
+          name: "roles",
+          widget: "list",
+          field: {label: "Role", name: "role", widget: "relation", collection: "roles", searchFields: ["name"], valueField: "name"}}
+  - name: "roles" # Used in routes, ie.: /admin/collections/:slug/edit
+    label: "Role" # Used in the UI, ie.: "New Post"
+    folder: "content/roles" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    fields: # The fields each document in this collection have
+      - {label: "Name", name: "name", widget: "string", required: true}
+      - {label: "Purpose", name: "purpose", widget: "string", required: true}
+      - {label: "Accountabilities", name: "purpose", widget: "markdown", required: true}
+      - label: "Holders"
+        name: "holders"
+        widget: "list"
+        fields:
+          - {label: "Name", name: "name", widget: "relation", collection: "members", searchFields: ["username"], valueField: "username"}
+          - {label: "Elected until", name: "electedUntil", widget: "date"}
+          - {label: "Focus", name: "focus", widget: "string"}
+        required: true
+  - name: "members" # Used in routes, ie.: /admin/collections/:slug/edit
+    label: "Member" # Used in the UI, ie.: "New Post"
+    folder: "content/members" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    fields: # The fields each document in this collection have
+      - {label: "User name", name: "username", widget: "string", required: true}
+      - {label: "Display name", name: "displayName", widget: "string", required: true}
+      - {label: "E-Mail", name: "email", widget: "string", pattern: ['^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$', "Must be a valid e-mail address."], required: true}
